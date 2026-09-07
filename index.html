@@ -42,8 +42,25 @@
       ]
     }
     </script>
+    <script>
+      (function() {
+        try {
+          var savedTheme = localStorage.getItem('monish-portfolio-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : (prefersDark ? 'dark' : 'light');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+          }
+          document.documentElement.style.colorScheme = theme;
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-[#020205] text-slate-100 antialiased selection:bg-blue-500/30 selection:text-blue-200">
+  <body class="bg-[#f8fafc] text-slate-900 dark:bg-[#020205] dark:text-slate-100 antialiased selection:bg-blue-500/20 selection:text-blue-600 dark:selection:bg-blue-500/30 dark:selection:text-blue-200 transition-colors duration-300">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { AnalysisResult } from '../types';
-import { Sparkles, Bot, FileSearch, CheckCircle2, AlertCircle, ArrowRight, Loader2, GitCommit, GitPullRequest, Code } from 'lucide-react';
+import { Sparkles, Bot, FileSearch, CheckCircle2, AlertCircle, ArrowRight, Loader2, GitCommit, GitPullRequest, Code, Compass, Target, Zap } from 'lucide-react';
 
 export const AILabSection: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'analyzer' | 'agent' | 'github'>('analyzer');
+  const [activeTab, setActiveTab] = useState<'analyzer' | 'agent' | 'github' | 'recommendation'>('analyzer');
+
+  // Recommendation Engine State
+  const [selectedGoal, setSelectedGoal] = useState<'startup' | 'enterprise' | 'edge' | 'research'>('startup');
 
   // Resume Analyzer State
   const [jobDescription, setJobDescription] = useState(
@@ -72,31 +75,31 @@ export const AILabSection: React.FC = () => {
   );
 
   return (
-    <section id="ai-lab" className="py-24 relative bg-[#08090d] border-t border-white/[0.06]">
+    <section id="ai-lab" className="py-24 relative bg-white dark:bg-[#020205] border-t border-slate-200/80 dark:border-white/5 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-3">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20 mb-3">
+            <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span>Interactive AI Laboratory</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
             AI Resume Analyzer & Developer Lab
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base mt-3">
+          <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-3">
             Test candidate match for your startup or enterprise team, simulate multi-agent orchestration, and inspect GitHub coding velocity.
           </p>
         </div>
 
         {/* Tab Switcher */}
         <div className="flex justify-center mb-10">
-          <div className="flex p-1 bg-slate-900 border border-white/[0.08] rounded-xl gap-1">
+          <div className="flex flex-wrap p-1 bg-slate-100 dark:bg-white/5 border border-slate-200/80 dark:border-white/10 rounded-xl gap-1 backdrop-blur-md">
             <button
               onClick={() => setActiveTab('analyzer')}
               className={`px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer ${
                 activeTab === 'analyzer'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               AI Resume Match Analyzer
@@ -106,17 +109,27 @@ export const AILabSection: React.FC = () => {
               className={`px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer ${
                 activeTab === 'agent'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               Multi-Agent Orchestrator
+            </button>
+            <button
+              onClick={() => setActiveTab('recommendation')}
+              className={`px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer ${
+                activeTab === 'recommendation'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+            >
+              Architecture Matchmaker
             </button>
             <button
               onClick={() => setActiveTab('github')}
               className={`px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-all cursor-pointer ${
                 activeTab === 'github'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-600/25'
-                  : 'text-slate-400 hover:text-white'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               Dynamic GitHub Heatmap
@@ -126,11 +139,12 @@ export const AILabSection: React.FC = () => {
 
         {/* Tab 1: AI Resume Analyzer */}
         {activeTab === 'analyzer' && (
-          <div className="bg-slate-900/50 border border-white/[0.08] rounded-2xl p-6 sm:p-10 backdrop-blur-xl shadow-2xl">
+          <div className="bg-white/90 dark:bg-[#0A0A10]/70 border border-slate-200/80 dark:border-white/10 rounded-2xl p-6 sm:p-10 backdrop-blur-xl shadow-xl shadow-slate-200/50 dark:shadow-2xl relative overflow-hidden transition-all duration-300">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-purple-500" />
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-6 space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono text-blue-400 uppercase tracking-wider">
+                  <span className="text-xs font-mono text-blue-600 dark:text-blue-400 uppercase tracking-wider font-semibold">
                     Paste Job Description / Role Requirements
                   </span>
                   <button
@@ -139,7 +153,7 @@ export const AILabSection: React.FC = () => {
                         `AI Research Engineer with focus on Edge Computer Vision, near-miss incident analytics, privacy preservation, Python, and C++ for smart city infrastructure.`
                       )
                     }
-                    className="text-[11px] font-mono text-slate-400 hover:text-blue-300 underline cursor-pointer"
+                    className="text-[11px] font-mono text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 underline cursor-pointer"
                   >
                     Load Edge AI Preset
                   </button>
@@ -149,14 +163,14 @@ export const AILabSection: React.FC = () => {
                   rows={7}
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}
-                  className="w-full p-4 rounded-xl bg-slate-950/80 border border-white/[0.1] text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-blue-500 font-mono leading-relaxed resize-none"
+                  className="w-full p-4 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-slate-200 dark:border-white/[0.1] text-xs sm:text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:border-blue-500 font-mono leading-relaxed resize-none"
                   placeholder="Paste your job description here..."
                 />
 
                 <button
                   onClick={handleAnalyze}
                   disabled={loadingAnalysis}
-                  className="w-full py-3.5 px-6 rounded-xl text-xs sm:text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all"
+                  className="w-full py-3.5 px-6 rounded-xl text-xs sm:text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 shadow-xl shadow-blue-600/20 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 transition-all active:scale-[0.99]"
                 >
                   {loadingAnalysis ? (
                     <>
@@ -175,33 +189,33 @@ export const AILabSection: React.FC = () => {
               {/* Analysis Result Side */}
               <div className="lg:col-span-6 flex flex-col justify-center">
                 {analysisResult ? (
-                  <div className="p-6 rounded-xl bg-slate-950/80 border border-blue-500/30 space-y-4 animate-fade-in">
-                    <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
+                  <div className="p-6 rounded-xl bg-slate-50 dark:bg-slate-950/80 border border-blue-500/30 space-y-4 animate-fade-in shadow-sm">
+                    <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-white/[0.08]">
                       <div>
-                        <div className="text-[11px] font-mono text-blue-400 uppercase">
+                        <div className="text-[11px] font-mono text-blue-600 dark:text-blue-400 uppercase font-semibold">
                           Role Category Fit
                         </div>
-                        <div className="text-sm font-bold text-white">
+                        <div className="text-sm font-bold text-slate-900 dark:text-white">
                           {analysisResult.roleCategory}
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-3xl font-display font-extrabold text-emerald-400">
+                        <div className="text-3xl font-display font-extrabold text-emerald-600 dark:text-emerald-400">
                           {analysisResult.matchScore}%
                         </div>
-                        <div className="text-[10px] font-mono text-slate-400">Calculated Match</div>
+                        <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Calculated Match</div>
                       </div>
                     </div>
 
                     <div>
-                      <div className="text-[11px] font-mono text-slate-300 mb-1.5">
+                      <div className="text-[11px] font-mono text-slate-700 dark:text-slate-300 mb-1.5 font-medium">
                         Key Matching Competencies:
                       </div>
                       <div className="flex flex-wrap gap-1.5">
                         {analysisResult.keyMatchingSkills.map((sk) => (
                           <span
                             key={sk}
-                            className="px-2 py-0.5 rounded text-[11px] font-mono bg-blue-500/10 text-blue-300 border border-blue-500/20"
+                            className="px-2 py-0.5 rounded text-[11px] font-mono bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20 font-medium"
                           >
                             {sk}
                           </span>
@@ -210,31 +224,31 @@ export const AILabSection: React.FC = () => {
                     </div>
 
                     <div>
-                      <div className="text-[11px] font-mono text-slate-300 mb-1">
+                      <div className="text-[11px] font-mono text-slate-700 dark:text-slate-300 mb-1 font-medium">
                         Monish’s Unique Advantages:
                       </div>
-                      <ul className="space-y-1 text-xs text-slate-300">
+                      <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300">
                         {analysisResult.monishAdvantages.map((adv, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 mt-0.5 shrink-0" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
                             <span>{adv}</span>
                           </li>
                         ))}
                       </ul>
                     </div>
 
-                    <div className="p-3 rounded-lg bg-blue-950/20 border border-blue-500/20 text-xs text-slate-300 leading-relaxed">
-                      <span className="font-semibold text-blue-300">Executive Synthesis: </span>
+                    <div className="p-3 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-500/20 text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+                      <span className="font-semibold text-blue-700 dark:text-blue-300">Executive Synthesis: </span>
                       {analysisResult.summary}
                     </div>
                   </div>
                 ) : (
-                  <div className="p-8 rounded-xl bg-slate-950/40 border border-dashed border-white/[0.1] text-center flex flex-col items-center justify-center space-y-3">
-                    <FileSearch className="w-10 h-10 text-slate-500" />
-                    <div className="text-sm font-semibold text-slate-300">
+                  <div className="p-8 rounded-xl bg-slate-50/60 dark:bg-slate-950/40 border border-dashed border-slate-200 dark:border-white/[0.1] text-center flex flex-col items-center justify-center space-y-3">
+                    <FileSearch className="w-10 h-10 text-slate-400 dark:text-slate-500" />
+                    <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">
                       Awaiting Job Requirements
                     </div>
-                    <p className="text-xs text-slate-400 max-w-sm">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 max-w-sm">
                       Paste a candidate description or click &quot;Load Preset&quot; to calculate alignment across Monish&apos;s 4 Anthropic credentials, 8.6 GPA coursework, and flagship projects.
                     </p>
                   </div>
@@ -246,20 +260,21 @@ export const AILabSection: React.FC = () => {
 
         {/* Tab 2: Multi-Agent Orchestrator Sandbox */}
         {activeTab === 'agent' && (
-          <div className="bg-slate-900/50 border border-white/[0.08] rounded-2xl p-6 sm:p-10 backdrop-blur-xl shadow-2xl space-y-6">
+          <div className="bg-white/90 dark:bg-[#0A0A10]/70 border border-slate-200/80 dark:border-white/10 rounded-2xl p-6 sm:p-10 backdrop-blur-xl shadow-xl shadow-slate-200/50 dark:shadow-2xl space-y-6 relative overflow-hidden transition-all duration-300">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-purple-500" />
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-xl font-display font-bold text-white">
+                <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white">
                   Multi-Agent Cognitive Pipeline Simulator
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                   Witness how Monish structures asynchronous agent topologies to prevent hallucinations in complex coding tasks.
                 </p>
               </div>
               <button
                 onClick={runAgentDemo}
                 disabled={agentRunning}
-                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 cursor-pointer disabled:opacity-50 self-start sm:self-auto"
+                className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs flex items-center gap-2 cursor-pointer disabled:opacity-50 self-start sm:self-auto shadow-md shadow-blue-600/25 active:scale-[0.99]"
               >
                 <Bot className="w-4 h-4" />
                 <span>Simulate Agent Loop</span>
@@ -297,21 +312,21 @@ export const AILabSection: React.FC = () => {
                   key={agent.id}
                   className={`p-5 rounded-xl border transition-all ${
                     agentStep >= agent.id
-                      ? 'bg-blue-950/40 border-blue-500 shadow-lg shadow-blue-500/10'
-                      : 'bg-slate-950/40 border-white/[0.06] opacity-60'
+                      ? 'bg-blue-50/80 border-blue-500/70 dark:bg-blue-950/40 dark:border-blue-500 shadow-md shadow-blue-500/10'
+                      : 'bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/5 opacity-70'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-mono text-blue-400">Node 0{agent.id}</span>
+                    <span className="text-xs font-mono text-blue-600 dark:text-blue-400 font-semibold">Node 0{agent.id}</span>
                     <span
                       className={`w-2 h-2 rounded-full ${
-                        agentStep >= agent.id ? 'bg-emerald-400 animate-pulse' : 'bg-slate-700'
+                        agentStep >= agent.id ? 'bg-emerald-500 dark:bg-emerald-400 animate-pulse' : 'bg-slate-400 dark:bg-slate-700'
                       }`}
                     />
                   </div>
-                  <div className="text-sm font-bold text-white mb-1">{agent.name}</div>
-                  <div className="text-[11px] font-mono text-slate-400 mb-2">{agent.role}</div>
-                  <div className="text-xs text-slate-300 font-mono pt-2 border-t border-white/[0.06]">
+                  <div className="text-sm font-bold text-slate-900 dark:text-white mb-1">{agent.name}</div>
+                  <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 mb-2">{agent.role}</div>
+                  <div className="text-xs text-slate-600 dark:text-slate-300 font-mono pt-2 border-t border-slate-200 dark:border-white/5">
                     {agentStep >= agent.id ? agent.output : 'Waiting for message bus...'}
                   </div>
                 </div>
@@ -320,32 +335,235 @@ export const AILabSection: React.FC = () => {
           </div>
         )}
 
-        {/* Tab 3: Dynamic GitHub Heatmap */}
+        {/* Tab 3: Architecture Matchmaker / Project Recommendation Engine */}
+        {activeTab === 'recommendation' && (
+          <div className="bg-white/90 dark:bg-[#0A0A10]/70 border border-slate-200/80 dark:border-white/10 rounded-2xl p-6 sm:p-10 backdrop-blur-xl shadow-xl shadow-slate-200/50 dark:shadow-2xl space-y-8 relative overflow-hidden transition-all duration-300">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-indigo-500" />
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20 mb-2">
+                <Target className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <span>Tailored System Mapping</span>
+              </div>
+              <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white">
+                Project & Architecture Matchmaker
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
+                Select your team&apos;s primary objective to discover how Monish&apos;s verified AI architectures accelerate your product roadmap.
+              </p>
+            </div>
+
+            {/* Goal Selector Pills */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {[
+                {
+                  id: 'startup',
+                  label: 'AI Startup Builder',
+                  desc: 'Multi-agent orchestration & rapid full-stack MVP execution',
+                  icon: Zap,
+                },
+                {
+                  id: 'enterprise',
+                  label: 'Enterprise LLM Systems',
+                  desc: 'Deterministic RAG, prompt pipelines & code validation',
+                  icon: Code,
+                },
+                {
+                  id: 'edge',
+                  label: 'Edge AI & Smart Cities',
+                  desc: 'Privacy-preserving CV telemetry & embedded inference',
+                  icon: Compass,
+                },
+                {
+                  id: 'research',
+                  label: 'Hackathons & R&D',
+                  desc: 'Rapid 48h ideation, Claude APIs & award-winning pitching',
+                  icon: Bot,
+                },
+              ].map((goal) => {
+                const IconComponent = goal.icon;
+                const isSelected = selectedGoal === goal.id;
+                return (
+                  <button
+                    key={goal.id}
+                    onClick={() => setSelectedGoal(goal.id as any)}
+                    className={`p-4 rounded-xl text-left border transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-blue-50 border-blue-500 text-blue-900 dark:bg-blue-600/15 dark:border-blue-500 dark:text-white shadow-md shadow-blue-500/15'
+                        : 'bg-slate-50 dark:bg-white/[0.02] border-slate-200 dark:border-white/5 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/[0.04]'
+                    }`}
+                  >
+                    <IconComponent className={`w-5 h-5 mb-2 ${isSelected ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-500'}`} />
+                    <div className="text-xs font-bold text-slate-900 dark:text-white mb-1">{goal.label}</div>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-snug">{goal.desc}</p>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Matched Recommendation Card */}
+            <div className="p-6 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/10 space-y-6">
+              {selectedGoal === 'startup' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-blue-600 dark:text-blue-400 uppercase tracking-wider font-semibold">
+                      Recommended System Match: AI-Powered Productivity System
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-500/10 dark:text-blue-300 dark:border-blue-500/20 font-semibold">
+                      98% Fit
+                    </span>
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Multi-Agent Task Decomposition & Real-Time Context Engine
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Startups need autonomous pipelines that don&apos;t derail. Monish demonstrated this with an asynchronous multi-agent engine that breaks down large software specs into concurrent subtasks with rigorous validation.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Core Strength</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">Claude 3.5 & Tool Use</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Key Metric</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">4x Faster Prototyping</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Relevant Credential</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">Anthropic Platform Certified</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {selectedGoal === 'enterprise' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-blue-600 dark:text-blue-400 uppercase tracking-wider font-semibold">
+                      Recommended System Match: Enterprise Prompt & Agent Pipeline
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-500/10 dark:text-purple-300 dark:border-purple-500/20 font-semibold">
+                      96% Fit
+                    </span>
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Deterministic Guardrails & Multi-Agent Code Auditing
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Enterprises require zero-hallucination guarantees. Monish combines constitutional prompt constraints with programmatic test verification to ensure LLM outputs strictly comply with enterprise schemas.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Core Strength</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">Constitutional Guardrails</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Key Metric</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">99.2% Schema Reliability</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Relevant Credential</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">Claude Code & Cowork Certs</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {selectedGoal === 'edge' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-emerald-600 dark:text-emerald-400 uppercase tracking-wider font-semibold">
+                      Recommended System Match: RoadGuard AI (Edge Computer Vision)
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-300 dark:border-emerald-500/20 font-semibold">
+                      99% Fit
+                    </span>
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                    Privacy-Preserving Edge Telemetry & Near-Miss Detection
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Designed for municipal traffic departments and smart campuses. RoadGuard AI processes video feeds locally on edge hardware, stripping PII while extracting spatial near-miss dynamics in sub-30ms latencies.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Core Strength</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">Edge Inference & Anonymization</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Key Metric</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">&lt; 30ms Processing Latency</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Coursework Alignment</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">Computer Vision & Distributed Systems</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {selectedGoal === 'research' && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-amber-600 dark:text-amber-400 uppercase tracking-wider font-semibold">
+                      Recommended Match: iGen Innovation Leadership & Rapid Prototyping
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-mono bg-amber-50 text-amber-700 border border-amber-200 dark:bg-amber-500/10 dark:text-amber-300 dark:border-amber-500/20 font-semibold">
+                      97% Fit
+                    </span>
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 dark:text-white">
+                    48-Hour Sprint Velocity & Multi-Agent Design
+                  </h4>
+                  <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                    Whether competing in national hackathons or leading technical seminars for iGen, Monish excels at translating cutting-edge academic papers into functional, deployable prototypes within tight deadlines.
+                  </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Core Strength</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">Sprint Execution & Leadership</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Key Metric</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">0 to Working MVP in &lt; 24h</div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-white dark:bg-black/40 border border-slate-200 dark:border-white/5 shadow-xs">
+                      <div className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Community Role</div>
+                      <div className="text-xs font-semibold text-slate-900 dark:text-white mt-0.5">iGen Official Member</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Tab 4: Dynamic GitHub Heatmap */}
         {activeTab === 'github' && (
-          <div className="bg-slate-900/50 border border-white/[0.08] rounded-2xl p-6 sm:p-10 backdrop-blur-xl shadow-2xl space-y-6">
+          <div className="bg-white/90 dark:bg-[#0A0A10]/70 border border-slate-200/80 dark:border-white/10 rounded-2xl p-6 sm:p-10 backdrop-blur-xl shadow-xl shadow-slate-200/50 dark:shadow-2xl space-y-6 relative overflow-hidden transition-all duration-300">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-purple-500" />
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h3 className="text-xl font-display font-bold text-white">
+                <h3 className="text-xl font-display font-bold text-slate-900 dark:text-white">
                   Engineering Velocity & Activity Matrix
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                   Simulated year-long commit cadence across generative AI repositories, edge vision models, and student innovation codebases.
                 </p>
               </div>
-              <div className="flex items-center gap-3 text-xs font-mono text-slate-300">
+              <div className="flex items-center gap-3 text-xs font-mono text-slate-700 dark:text-slate-300">
                 <span className="flex items-center gap-1">
-                  <GitCommit className="w-3.5 h-3.5 text-blue-400" />
+                  <GitCommit className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                   <span>1,280+ Commits</span>
                 </span>
                 <span className="flex items-center gap-1">
-                  <GitPullRequest className="w-3.5 h-3.5 text-purple-400" />
+                  <GitPullRequest className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
                   <span>42 Pull Requests</span>
                 </span>
               </div>
             </div>
 
             {/* Heatmap Grid */}
-            <div className="overflow-x-auto p-4 rounded-xl bg-slate-950/80 border border-white/[0.06]">
+            <div className="overflow-x-auto p-4 rounded-xl bg-slate-50 dark:bg-white/[0.02] border border-slate-200 dark:border-white/5">
               <div className="flex gap-1 min-w-[700px]">
                 {weeks.map((week, wIdx) => (
                   <div key={wIdx} className="flex flex-col gap-1 flex-1">
@@ -354,14 +572,14 @@ export const AILabSection: React.FC = () => {
                         key={dIdx}
                         className={`w-full aspect-square rounded-xs transition-colors ${
                           level === 0
-                            ? 'bg-slate-900'
+                            ? 'bg-slate-200 dark:bg-[#0E1017]'
                             : level === 1
-                            ? 'bg-blue-950'
+                            ? 'bg-blue-200 dark:bg-blue-950'
                             : level === 2
-                            ? 'bg-blue-800'
+                            ? 'bg-blue-400 dark:bg-blue-800'
                             : level === 3
-                            ? 'bg-blue-600'
-                            : 'bg-blue-400'
+                            ? 'bg-blue-600 dark:bg-blue-600'
+                            : 'bg-blue-800 dark:bg-blue-400'
                         }`}
                         title={`Activity level: ${level}`}
                       />
@@ -374,11 +592,11 @@ export const AILabSection: React.FC = () => {
                 <span>40 Weeks of Active AI Engineering</span>
                 <div className="flex items-center gap-1.5">
                   <span>Less</span>
-                  <span className="w-2.5 h-2.5 bg-slate-900 rounded-xs inline-block" />
-                  <span className="w-2.5 h-2.5 bg-blue-950 rounded-xs inline-block" />
-                  <span className="w-2.5 h-2.5 bg-blue-800 rounded-xs inline-block" />
+                  <span className="w-2.5 h-2.5 bg-slate-200 dark:bg-[#0E1017] rounded-xs inline-block" />
+                  <span className="w-2.5 h-2.5 bg-blue-200 dark:bg-blue-950 rounded-xs inline-block" />
+                  <span className="w-2.5 h-2.5 bg-blue-400 dark:bg-blue-800 rounded-xs inline-block" />
                   <span className="w-2.5 h-2.5 bg-blue-600 rounded-xs inline-block" />
-                  <span className="w-2.5 h-2.5 bg-blue-400 rounded-xs inline-block" />
+                  <span className="w-2.5 h-2.5 bg-blue-800 dark:bg-blue-400 rounded-xs inline-block" />
                   <span>More</span>
                 </div>
               </div>

@@ -27,6 +27,76 @@ function getAIClient(): GoogleGenAI | null {
   return aiClient;
 }
 
+// Resilient generation helper with automatic model fallback & retry for transient 503 spikes
+async function safeGenerateContent(
+  ai: GoogleGenAI,
+  options: {
+    contents: any;
+    config?: any;
+    primaryModel?: string;
+  }
+): Promise<string | null> {
+  const candidateModels = [
+    options.primaryModel || "gemini-3.8-flash",
+    "gemini-flash-latest",
+  ];
+
+  for (const model of candidateModels) {
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const response = await ai.models.generateContent({
+          model,
+          contents: options.contents,
+          config: options.config,
+        });
+        if (response && response.text) {
+          return response.text;
+        }
+      } catch (err: any) {
+        const errMsg = err?.message || String(err);
+        const isTransient =
+          errMsg.includes("503") ||
+          errMsg.includes("UNAVAILABLE") ||
+          errMsg.includes("high demand") ||
+          errMsg.includes("429");
+
+        if (isTransient && attempt === 0) {
+          // Non-blocking wait before retrying once on temporary demand spike
+          await new Promise((resolve) => setTimeout(resolve, 800));
+          continue;
+        }
+        // Try secondary fallback model on failure
+        break;
+      }
+    }
+  }
+
+  return null;
+}
+
+// Safe JSON parser for structured schema outputs
+function parseJsonSafely(text: string | null): any {
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    const cleaned = text.replace(/```json\s*/gi, "").replace(/```\s*$/gi, "").trim();
+    try {
+      return JSON.parse(cleaned);
+    } catch {
+      const match = cleaned.match(/\{[\s\S]*\}/);
+      if (match) {
+        try {
+          return JSON.parse(match[0]);
+        } catch {
+          return null;
+        }
+      }
+      return null;
+    }
+  }
+}
+
 const MONISH_RESUME_CONTEXT = `
 Monish R is a high-achieving Computer Science Engineering undergraduate (B.E. in CSE at R.M.K. Engineering College, Class of Spring 2029, CGPA: 8.6/10) specializing in Artificial Intelligence, Generative AI, and AI-assisted development.
 Contact:
@@ -113,20 +183,20 @@ ${MONISH_RESUME_CONTEXT}
         },
       ];
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3.8-flash",
-        contents: contents,
+      const replyText = await safeGenerateContent(ai, {
+        contents,
         config: {
           systemInstruction,
           temperature: 0.7,
         },
       });
 
-      const reply = response.text || "Monish is an AI Engineer and Generative AI enthusiast specializing in Multi-Agent systems, RAG, and Edge AI.";
-      res.json({ reply });
-      return;
-    } catch (err: any) {
-      console.error("Gemini API error, falling back to heuristic engine:", err.message);
+      if (replyText) {
+        res.json({ reply: replyText });
+        return;
+      }
+    } catch {
+      // Proceed to verified domain-knowledge heuristic fallback
     }
   }
 
@@ -197,19 +267,20 @@ Evaluate and return a valid JSON object matching this schema:
 }
 `;
 
-      const response = await ai.models.generateContent({
-        model: "gemini-3.8-flash",
+      const text = await safeGenerateContent(ai, {
         contents: prompt,
         config: {
           responseMimeType: "application/json",
         },
       });
 
-      const parsed = JSON.parse(response.text || "{}");
-      res.json(parsed);
-      return;
-    } catch (err: any) {
-      console.error("Error in resume analyzer:", err.message);
+      const parsed = parseJsonSafely(text);
+      if (parsed && typeof parsed.matchScore === "number") {
+        res.json(parsed);
+        return;
+      }
+    } catch {
+      // Proceed to verified domain-knowledge heuristic fallback
     }
   }
 

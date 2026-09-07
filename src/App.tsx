@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useTheme } from './context/ThemeContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { AboutSection } from './components/AboutSection';
@@ -11,34 +12,26 @@ import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { AskMonishAIChat } from './components/AskMonishAIChat';
 import { ResumeModal } from './components/ResumeModal';
-import { Bot, Sparkles } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
 export default function App() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const { theme, toggleTheme, isDark } = useTheme();
   const [isAIChatOpen, setIsAIChatOpen] = useState(false);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
 
-  const toggleTheme = () => {
-    const next = theme === 'dark' ? 'light' : 'dark';
-    setTheme(next);
-    if (next === 'light') {
-      document.documentElement.classList.remove('dark');
-    } else {
-      document.documentElement.classList.add('dark');
-    }
-  };
-
   return (
-    <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#020205] text-slate-100' : 'bg-slate-50 text-slate-900'} font-sans relative selection:bg-blue-500/30 selection:text-blue-200 transition-colors duration-300 overflow-x-hidden`}>
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#020205] text-slate-900 dark:text-slate-100 font-sans relative selection:bg-blue-500/20 selection:text-blue-600 dark:selection:bg-blue-500/30 dark:selection:text-blue-200 transition-colors duration-300 overflow-x-hidden">
       {/* Immersive UI Ambient Glow & Grid Layer */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] max-w-[700px] max-h-[700px] bg-blue-600/10 rounded-full blur-[140px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[55vw] h-[55vw] max-w-[700px] max-h-[700px] bg-purple-600/10 rounded-full blur-[140px]" />
-        <div className="absolute top-[35%] left-[20%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-indigo-600/5 rounded-full blur-[150px]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[55vw] h-[55vw] max-w-[700px] max-h-[700px] bg-blue-500/10 dark:bg-blue-600/10 rounded-full blur-[140px] transition-colors duration-300" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[55vw] h-[55vw] max-w-[700px] max-h-[700px] bg-sky-400/10 dark:bg-purple-600/10 rounded-full blur-[140px] transition-colors duration-300" />
+        <div className="absolute top-[35%] left-[20%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-indigo-500/5 dark:bg-indigo-600/5 rounded-full blur-[150px] transition-colors duration-300" />
         <div
-          className="absolute inset-0 opacity-[0.035]"
+          className="absolute inset-0 opacity-[0.035] dark:opacity-[0.035]"
           style={{
-            backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)',
+            backgroundImage: isDark
+              ? 'radial-gradient(#ffffff 1px, transparent 1px)'
+              : 'radial-gradient(#0f172a 1px, transparent 1px)',
             backgroundSize: '40px 40px',
           }}
         />
