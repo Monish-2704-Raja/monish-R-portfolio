@@ -1,94 +1,162 @@
 import React, { useState } from 'react';
 import { CERTIFICATIONS } from '../data/portfolioData';
-import { Award, ShieldCheck, CheckCircle2, Sparkles, ExternalLink, Terminal } from 'lucide-react';
+import { Award, ShieldCheck, CheckCircle2, Sparkles, ChevronRight, Lock, Unlock, Zap } from 'lucide-react';
 
 export const CertificationsSection: React.FC = () => {
-  const [selectedCert, setSelectedCert] = useState<string | null>(null);
+  const [activeCertIndex, setActiveCertIndex] = useState(0);
+
+  const activeCert = CERTIFICATIONS[activeCertIndex] || CERTIFICATIONS[0];
 
   return (
-    <section id="certifications" className="py-24 relative bg-white dark:bg-[#020205] border-t border-slate-200/80 dark:border-white/5 transition-colors duration-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section
+      id="certifications"
+      className="py-24 relative bg-white dark:bg-[#020205] border-t border-slate-200/80 dark:border-white/5 transition-colors duration-300 overflow-hidden"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto mb-14">
+        <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono bg-purple-50 text-purple-700 border border-purple-200 dark:bg-purple-500/10 dark:text-purple-400 dark:border-purple-500/20 mb-3">
-            <Award className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
-            <span>Anthropic Certified Specialist</span>
+            <Award className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400 animate-pulse" />
+            <span>Anthropic Certified Specialist Journey</span>
           </div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-slate-900 dark:text-white tracking-tight">
-            Official Anthropic Certifications
+            Chronological Credential Pathway
           </h2>
-          <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-3">
-            Complete suite of verified Anthropic credentials demonstrating deep technical fluency in Claude models, API platforms, agentic coding workflows, and collaborative cowork.
+          <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base mt-2">
+            A verified 4-stage progression across Anthropic foundation architectures, constitutional prompt engineering, agentic terminal tooling, and enterprise cowork systems.
           </p>
         </div>
 
-        {/* 4x Anthropic Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {CERTIFICATIONS.map((cert) => (
+        {/* Dynamic Horizontal Progression Pathway */}
+        <div className="relative mb-14">
+          {/* Connecting Laser Pathway Track */}
+          <div className="hidden md:block absolute top-1/2 left-8 right-8 h-1 -translate-y-1/2 bg-slate-200 dark:bg-white/10 z-0">
             <div
-              key={cert.id}
-              onClick={() => setSelectedCert(cert.id === selectedCert ? null : cert.id)}
-              className={`p-6 rounded-2xl border transition-all duration-300 flex flex-col justify-between cursor-pointer backdrop-blur-xl ${
-                selectedCert === cert.id
-                  ? 'bg-purple-50/80 border-purple-400 dark:bg-purple-950/20 dark:border-purple-500/60 shadow-xl shadow-purple-200/50 dark:shadow-purple-900/20'
-                  : 'bg-white/90 dark:bg-[#0A0A10]/70 border-slate-200/80 dark:border-white/10 hover:border-purple-400/80 hover:bg-slate-50/80 dark:hover:bg-[#0E0F18]/90 shadow-md shadow-slate-200/40 dark:shadow-xl'
-              }`}
-            >
-              <div>
-                {/* Badge Header */}
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 flex items-center justify-center text-purple-600 dark:text-purple-400">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400"></span>
-                    Verified
-                  </span>
-                </div>
+              className="h-full bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500 transition-all duration-700 ease-out shadow-[0_0_12px_rgba(168,85,247,0.7)]"
+              style={{ width: `${(activeCertIndex / (CERTIFICATIONS.length - 1)) * 100}%` }}
+            />
+          </div>
 
-                <div className="text-xs font-mono text-purple-600 dark:text-purple-300 font-semibold mb-1">{cert.issuer}</div>
-                <h3 className="text-lg font-display font-bold text-slate-900 dark:text-white mb-2 leading-snug">
-                  {cert.title}
+          {/* 4 Milestones */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 relative z-10">
+            {CERTIFICATIONS.map((cert, idx) => {
+              const isPassed = idx <= activeCertIndex;
+              const isCurrent = idx === activeCertIndex;
+
+              return (
+                <button
+                  key={cert.id}
+                  onClick={() => setActiveCertIndex(idx)}
+                  className={`p-4 rounded-2xl border text-left transition-all duration-300 cursor-pointer backdrop-blur-xl relative overflow-hidden group ${
+                    isCurrent
+                      ? 'bg-purple-50/90 border-purple-500 dark:bg-purple-950/40 dark:border-purple-400 shadow-xl shadow-purple-500/15 scale-102 ring-2 ring-purple-500/30'
+                      : isPassed
+                      ? 'bg-white/90 dark:bg-[#0A0A12]/80 border-slate-200 dark:border-white/10 hover:border-purple-300'
+                      : 'bg-white/60 dark:bg-[#06060c]/60 border-slate-200/60 dark:border-white/5 opacity-70'
+                  }`}
+                >
+                  {/* Subtle Light Sweep effect on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
+
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[11px] font-mono font-bold text-purple-600 dark:text-purple-400">
+                      MILESTONE 0{idx + 1}
+                    </span>
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                        isCurrent
+                          ? 'bg-purple-600 text-white animate-bounce'
+                          : isPassed
+                          ? 'bg-emerald-500 text-white'
+                          : 'bg-slate-200 dark:bg-slate-800 text-slate-400'
+                      }`}
+                    >
+                      {isPassed ? <Unlock className="w-3 h-3" /> : <Lock className="w-3 h-3" />}
+                    </div>
+                  </div>
+
+                  <h3 className="font-display font-bold text-sm text-slate-900 dark:text-white line-clamp-1 mb-1">
+                    {cert.title}
+                  </h3>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+                    {cert.issuerBadge}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Milestone Spotlight Stage Card */}
+        <div className="bg-white/90 dark:bg-[#0A0A12]/80 border border-slate-200/90 dark:border-white/10 rounded-3xl p-6 sm:p-10 backdrop-blur-2xl shadow-2xl relative overflow-hidden">
+          {/* Top border glow */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left: Certificate Emblem & Verification Stamp */}
+            <div className="lg:col-span-4 flex flex-col items-center justify-center p-6 rounded-2xl bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200/70 dark:border-purple-500/20 text-center">
+              <div className="w-16 h-16 rounded-2xl bg-purple-600 text-white flex items-center justify-center mb-4 shadow-xl shadow-purple-600/30">
+                <ShieldCheck className="w-8 h-8" />
+              </div>
+              <div className="text-xs font-mono font-bold text-purple-700 dark:text-purple-300">
+                ANTHROPIC CREDENTIAL ID
+              </div>
+              <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">
+                ANT-2024-MONISH-{activeCert.id.toUpperCase()}
+              </div>
+              <div className="mt-4 px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+                VERIFIED AUTHENTIC
+              </div>
+            </div>
+
+            {/* Right: Detailed Competencies and Architectural Scope */}
+            <div className="lg:col-span-8 space-y-4">
+              <div>
+                <div className="text-xs font-mono text-purple-600 dark:text-purple-400 font-bold uppercase tracking-wider">
+                  Stage {activeCertIndex + 1} of 4 — {activeCert.issuer}
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-display font-bold text-slate-900 dark:text-white mt-1">
+                  {activeCert.title}
                 </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-4">
-                  {cert.description}
+                <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mt-2">
+                  {activeCert.description}
                 </p>
               </div>
 
+              {/* Skills Verified */}
               <div>
-                <div className="text-[11px] font-mono text-slate-500 dark:text-slate-300 mb-2">Core Competencies:</div>
-                <div className="flex flex-wrap gap-1.5">
-                  {cert.skillsCovered.map((skill) => (
-                    <span
+                <div className="text-xs font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">
+                  Verified Engineering Mastery
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {activeCert.skillsCovered.map((skill) => (
+                    <div
                       key={skill}
-                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-slate-100 dark:bg-white/[0.04] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-white/5"
+                      className="px-3 py-1.5 rounded-xl text-xs font-mono font-medium bg-slate-100 dark:bg-white/[0.04] text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-white/10 flex items-center gap-1.5"
                     >
-                      {skill}
-                    </span>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                      <span>{skill}</span>
+                    </div>
                   ))}
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Certification Architecture Callout */}
-        <div className="mt-12 p-6 rounded-2xl bg-white/90 dark:bg-[#0A0A10]/70 border border-slate-200/80 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-2xl backdrop-blur-xl relative overflow-hidden flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-600 via-indigo-500 to-blue-500" />
-          <div className="space-y-1 text-center sm:text-left">
-            <div className="text-xs font-mono text-purple-600 dark:text-purple-300 uppercase tracking-wider font-semibold">
-              Anthropic Platform Fluency
-            </div>
-            <h4 className="text-lg font-display font-bold text-slate-900 dark:text-white">
-              Trained on Constitutional AI, Agent Tool Use, and Enterprise Context Windows
-            </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-400 max-w-2xl">
-              Monish has verified mastery across Claude 3.5 Sonnet / Haiku integration, prompt caching strategies, system prompt guardrails, and programmatic agent loops.
-            </p>
-          </div>
-          <div className="shrink-0">
-            <div className="px-4 py-2 rounded-xl bg-purple-50 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/30 text-purple-700 dark:text-purple-300 font-mono text-xs text-center font-semibold">
-              Verified Credential Tier: Top 1%
+              {/* Next Milestone Step Action */}
+              <div className="pt-2 flex items-center justify-between">
+                <button
+                  onClick={() =>
+                    setActiveCertIndex((prev) => (prev + 1) % CERTIFICATIONS.length)
+                  }
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold bg-purple-600 hover:bg-purple-500 text-white transition-all cursor-pointer shadow-md shadow-purple-600/25"
+                >
+                  <span>Advance to Next Milestone</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-mono text-slate-400">
+                  Step {activeCertIndex + 1} of 4
+                </span>
+              </div>
             </div>
           </div>
         </div>

@@ -42,7 +42,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenAI, onOpenResume }) => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden bg-[#F8FAFC] dark:bg-[#020205] transition-colors duration-300">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-28 pb-20 overflow-hidden bg-[#F8FAFC] dark:bg-[#020205] transition-colors duration-300">
       {/* 3D Three.js Interactive Canvas Background */}
       <HeroScene3D />
 
